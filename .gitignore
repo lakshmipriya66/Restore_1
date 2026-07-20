@@ -1,0 +1,22 @@
+# Build outputs
+bin/
+obj/
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test and package artifacts
+TestResults/
+packages/
+*.log
+
+# SQLite local database artifacts
+*.db
+*.db-shm
+*.db-wal
+API/appsettings.json
