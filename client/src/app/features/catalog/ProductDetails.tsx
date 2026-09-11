@@ -8,6 +8,8 @@ export default function ProductDetails() {
   const {data: product, isLoading} = useFetchProductDetailsQuery(id ? +id : 0)
 
    if (!product|| isLoading) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>;
+  if (!product) return <div>Product not found</div>;
     
    const ProductDetails = [
     {label: 'Name', value: product.name},

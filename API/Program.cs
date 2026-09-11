@@ -1,4 +1,5 @@
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 internal class Program
@@ -28,6 +29,7 @@ internal class Program
             });
         });
 
+        builder.Services.AddTransient<ExceptionMiddleware>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -40,7 +42,11 @@ internal class Program
             app.UseSwaggerUI();
         }
 
+        app.UseCors("ReactPolicy");
+
         app.UseHttpsRedirection();
+
+        app.UseMiddleware<ExceptionMiddleware>();
 
         app.UseCors("ReactPolicy");
 
