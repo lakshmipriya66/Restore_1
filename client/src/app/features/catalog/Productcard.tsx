@@ -1,24 +1,26 @@
 import { Card, CardMedia, CardContent, Typography, CardActions, Button} from "@mui/material";
 import type { Product } from '../../models/product';
 import { Link } from "react-router-dom";
-
+import { useAddBasketItemMutation } from "../basket/basketApi";
+import { currencyFormat } from "../../../lib/util";
 
 type Props = {
 
     product: Product;
 }
 
-export default function Productcard({ product }: Props) {
+export default function ProductCard({ product }: Props) {
+    const [addBasketItem, {isLoading}] = useAddBasketItemMutation();
     return (
         <Card
             elevation={3}
-                sx={{
-                    width: 200,
-                    borderRadius: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                }}
+            sx={{
+                width: 280,
+                borderRadius: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+            }}
         >
             <CardMedia
                 sx={{ height: 240, backgroundSize: 'cover' }}
@@ -29,8 +31,8 @@ export default function Productcard({ product }: Props) {
                 <Typography
                     gutterBottom
                     sx={{ textTransform: 'uppercase' }}
-                    variant="subtitle2"
-                >
+                    variant="subtitle2">
+                
                     {product.name}
                 </Typography>
 
@@ -38,17 +40,18 @@ export default function Productcard({ product }: Props) {
                     variant="h6"
                     sx={{ color: 'secondary.main' }}
                 >
-                    ${(product.price / 100).toFixed(2)}
+                    {currencyFormat(product.price)}
                 </Typography>
             </CardContent>
 
             <CardActions
                 sx={{ justifyContent: 'space-between' }}
             >
-                <Button>Add to cart</Button>
-                <Button component={Link} to={`/catalog/${product.id}`}>
-                    View
-                </Button>
+                <Button 
+                    disabled={isLoading}
+                    onClick={() => addBasketItem({product, quantity: 1})}
+                >Add to cart</Button>
+                <Button component={Link} to={`/catalog/${product.id}`}>View</Button>
             </CardActions>
         </Card>
     )

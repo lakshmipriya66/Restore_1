@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using API.Data;
 using API.Middleware;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,13 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services
-        builder.Services.AddControllers();
+    
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
         builder.Services.AddDbContext<StoreContext>(options =>
         {
@@ -25,7 +32,8 @@ internal class Program
                         "https://localhost:3000"
                     )
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
         });
 
@@ -41,6 +49,8 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        
+        app.UseCors("CorsPolicy");
 
         app.UseCors("ReactPolicy");
 
